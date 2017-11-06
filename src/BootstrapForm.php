@@ -629,12 +629,11 @@ class BootstrapForm
     public function input($type, $name, $label = null, $value = null, array $options = [])
     {
         $label = $this->getLabelTitle($label, $name);
+        $fieldError = $this->getFieldError($name);
 
         $optionsField = $this->getFieldOptions(array_except($options, ['suffix', 'prefix']), $name);
-
-        if(isset($options['prefix']) || isset($options['suffix'])) {
-            $this->config->set('bootstrap_form.right_column_class', $this->config->get('bootstrap_form.right_column_class'). ' input-group');
-        }
+        if($fieldError)
+            $optionsField['class']  .= " is-invalid";
 
         $inputElement = '';
 
@@ -648,8 +647,15 @@ class BootstrapForm
             $inputElement .= $options['suffix'];
         }
 
-        $wrapperOptions = $this->isHorizontal() ? ['class' => $this->getRightColumnClass()] : [];
-        $wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement . $this->getFieldError($name) . $this->getHelpText($name, $optionsField) . '</div>';
+        $wrapperOptions['class']        = '';
+        if($this->isHorizontal()) {
+            $wrapperOptions['class']    = $this->getRightColumnClass();
+        }
+        if(isset($options['prefix']) || isset($options['suffix'])) {
+            $wrapperOptions['class']    .= ' input-group';
+        }
+
+        $wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement . $fieldError . $this->getHelpText($name, $optionsField) . '</div>';
 
         return $this->getFormGroup($name, $label, $wrapperElement);
     }
