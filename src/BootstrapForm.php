@@ -637,13 +637,13 @@ class BootstrapForm
 
         $inputElement = '';
 
-        if(isset($options['prefix'])) {
+         if(isset($options['prefix'])) {
             $inputElement = $options['prefix'];
         }
 
         $inputElement .= $type === 'password' ? $this->form->password($name, $optionsField) : $this->form->{$type}($name, $value, $optionsField);
 
-        if(isset($options['suffix'])) {
+         if(isset($options['suffix'])) {
             $inputElement .= $options['suffix'];
         }
 
