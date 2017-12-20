@@ -2,6 +2,7 @@
 
 namespace Watson\BootstrapForm;
 
+use Carbon\Carbon;
 use Collective\Html\FormBuilder;
 use Collective\Html\HtmlBuilder;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -346,6 +347,38 @@ class BootstrapForm
     public function date($name, $label = null, $value = null, array $options = [])
     {
         return $this->input('date', $name, $label, $value, $options);
+    }
+
+    /**
+     * Create a date select box field.
+     *
+     * @param  string $name
+     * @param  string $label
+     * @param Carbon|null $date
+     * @param  array $options
+     * @return string
+     */
+    public function date_select($name, $label = null, Carbon $date = null, array $options = [])
+    {
+        $label = $this->getLabelTitle($label, $name);
+
+        $options        = $this->getFieldOptions($options, $name);
+
+        $arr_month      = range(1, 12);
+        $arr_day        = range(1, 31);
+
+        $year_min       = array_get($options, 'year_min', date('Y') - 15);
+        $year_max       = array_get($options, 'year_max', date('Y'));
+        $arr_year       = range($year_min, $year_max);
+
+        $input_month    = $this->form->select($name."_month", array_combine($arr_month,$arr_month), $date->month, $options);
+        $input_day      = $this->form->select($name."_day", array_combine($arr_day,$arr_day), $date->day, $options);
+        $input_year     = $this->form->select($name."_year", array_combine($arr_year,$arr_year), $date->year, $options);
+
+        $wrapperOptions = $this->isHorizontal() ? ['class' => $this->getRightColumnClass()] : [];
+        $wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $input_month . $input_day . $input_year . $this->getFieldError($name) . $this->getHelpText($name, $options) . '</div>';
+
+        return $this->getFormGroup($name, $label, $wrapperElement);
     }
 
      /**
