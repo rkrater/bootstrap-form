@@ -371,9 +371,10 @@ class BootstrapForm
         $year_max       = array_get($options, 'year_max', date('Y'));
         $arr_year       = range($year_min, $year_max);
 
-        $input_month    = $this->form->select($name."_month", array_combine($arr_month,$arr_month), $date->month, $options);
-        $input_day      = $this->form->select($name."_day", array_combine($arr_day,$arr_day), $date->day, $options);
-        $input_year     = $this->form->select($name."_year", array_combine($arr_year,$arr_year), $date->year, $options);
+
+        $input_month    = $this->form->select($name."_month", array_combine($arr_month,$arr_month), optional($date)->month, $options);
+        $input_day      = $this->form->select($name."_day", array_combine($arr_day,$arr_day), optional($date)->day, $options);
+        $input_year     = $this->form->select($name."_year", array_combine($arr_year,$arr_year), optional($date)->year, $options);
 
         return "<div class=\"row\"><div class=\"col form-inline\">{$input_month}{$input_day}{$input_year}</div></div>";
     }
