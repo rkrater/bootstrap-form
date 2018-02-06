@@ -731,6 +731,7 @@ class BootstrapForm
     public function addonIcon($icon, $options = [])
     {
         $prefix = array_get($options, 'prefix', $this->getIconPrefix());
+        $options['class']   = 'input-group-text';
 
         return '<div class="input-group-prepend"><span ' . $this->html->attributes($options) . '><i class="'.$prefix.$icon.'"></i></span></div>';
     }
